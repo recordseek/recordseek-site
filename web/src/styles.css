@@ -284,8 +284,12 @@ footer { border-top:1px solid var(--border); padding:34px 0; }
 .feedback-copy p { font-size:13px; color:var(--muted-foreground); line-height:1.8; }
 .feedback-form { display:flex; flex-direction:column; gap:12px; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:20px; }
 .feedback-form .main-action { align-self:flex-end; }
+.feedback-inner { align-items:center; }
+.feedback-open { justify-self:end; }
+.feedback-dialog .feedback-form { background:none; border:0; border-radius:0; padding:0; }
+.feedback-thanks-actions { display:flex; gap:8px; justify-content:flex-end; }
 .feedback-kinds { display:flex; gap:8px; }
 .feedback-thanks { font-weight:600; }
 .feedback-error { color:var(--destructive); font-size:13px; }
 .feedback-hp { position:absolute; left:-9999px; width:1px; height:1px; }
-@media (max-width: 760px) { .feedback-inner { grid-template-columns:1fr; gap:24px; } }
+@media (max-width: 760px) { .feedback-inner { grid-template-columns:1fr; gap:24px; } .feedback-open { justify-self:start; } }
