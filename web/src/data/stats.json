@@ -1,0 +1,18 @@
+{
+  "sources": 2142018,
+  "historians": 157472,
+  "through": "2026-10-14",
+  "baseline": {
+    "source": "Google Analytics 4",
+    "from": "2023-06-16",
+    "through": "2026-10-14",
+    "sources": 2142018,
+    "historians": 157472
+  },
+  "posthog": {
+    "since": "2026-10-15",
+    "sources": 0,
+    "historians": 0
+  },
+  "updatedAt": "2026-10-18T00:00:00.000Z"
+}

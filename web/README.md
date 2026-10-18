@@ -27,3 +27,19 @@ npm run dev
 - TypeScript
 - React
 - Tailwind CSS
+
+## Homepage stats
+
+The "sources saved" / "family historians" numbers on the homepage come from `web/src/data/stats.json`
+and are baked into the prerendered HTML at build time (shown rounded down to the thousand, e.g. `2,142,000+`).
+
+- Totals = a fixed Google Analytics 4 baseline (2023-06-16 to 2026-10-14) + PostHog counts since 2026-10-15.
+- `.github/workflows/update-stats.yml` runs at 07:17 UTC on the 1st of each month. It runs
+  `scripts/update-stats.mjs` (HogQL over `fs_source_created`, `zotero_saved`, `geni_saved`), appends/replaces the
+  month's row in `metrics/stats-monthly.csv`, rebuilds only the marketing site (`SKIP_SHARE=1 scripts/release.sh`),
+  and pushes to `site`, which GitHub Pages republishes.
+- Needs the repo secret `POSTHOG_API_KEY` (PostHog personal API key, `query:read`). Optional env:
+  `POSTHOG_HOST` (default `https://us.posthog.com`), `POSTHOG_PROJECT_ID` (default `665976`).
+- Run manually: `gh workflow run update-stats.yml`. Locally: `POSTHOG_API_KEY=... node scripts/update-stats.mjs --dry-run`
+  (drop `--dry-run` to write the files). Re-running in the same month replaces that month's row.
+- Tests: `node --test scripts/update-stats.test.mjs` and `cd web && npx vitest run`.
