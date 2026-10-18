@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, ArrowUpRight, Check, CheckCheck, Compass, Download, Link2, Plus, Puzzle, Quote, Search, Smartphone, Sparkles, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Brand, BookmarkletButton, BookmarkletLink, SiteFooter, SiteHeader } from '@/components/site-chrome';
+import { FeedbackBox } from '@/components/feedback-box';
 import { track } from '@/lib/analytics';
 import archiveImage from '@/assets/family-archive.jpg';
 import markImage from '@/assets/recordseek-mark.png';
@@ -94,6 +95,7 @@ function Index() {
         ['When can I get the mobile app?', 'The new RecordSeek mobile app is coming soon. The release date and download links will be shared when it is ready.'],
         ['Can I use it without a browser extension?', 'Yes. The RecordSeek bookmarklet is an alternative for supported browsers and shared computers. Drag the button from the download section to your bookmarks bar, or follow the installation instructions linked above to get started.'],
       ].map(([question, answer]) => <details key={question}><summary>{question}<Plus /></summary><p>{answer}</p></details>)}</div></section>
+      <FeedbackBox />
     </main>
     <SiteFooter />
     {dialog && <div className="dialog-backdrop" onClick={event => { if (event.target === event.currentTarget) setDialog(null); }}><div ref={dialogRef} className="download-dialog" role="dialog" aria-modal="true" aria-labelledby="download-title"><Button className="dialog-close" variant="ghost" size="icon" aria-label="Close dialog" onClick={() => setDialog(null)}><X /></Button><span className="eyebrow">{dialog === 'extensions' ? 'Your next discovery awaits' : 'A new chapter is coming'}</span><h2 id="download-title">{dialog === 'extensions' ? 'Choose your browser.' : 'RecordSeek, on the go.'}</h2>{dialog === 'extensions' ? <><p>Get the current extension today. New updates are on the way.</p><div className="dialog-browsers">{browsers.filter(browser => browser.href).map(browser => <Button key={browser.name} variant="outline" asChild><a href={browser.href ?? undefined} target="_blank" rel="noreferrer" data-browser={browser.name} aria-label={`Get RecordSeek for ${browser.name}`}><span className="dialog-browser-name"><BrowserLogo name={browser.name} />{browser.name}</span><ArrowUpRight /></a></Button>)}</div><p>Safari · Coming soon</p></> : <><p>We’re preparing a new mobile app for discoveries away from your desk. Download links and a release date will be shared when it’s ready.</p><div className="dialog-platforms"><span className="platform-tag"><Smartphone /> iOS</span><span className="platform-tag"><Smartphone /> Android</span></div><Button asChild className="main-action"><a href="#extensions" onClick={() => setDialog(null)}>Explore browser extensions <ArrowRight /></a></Button></>}</div></div>}

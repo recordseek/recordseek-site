@@ -278,3 +278,14 @@ footer { border-top:1px solid var(--border); padding:34px 0; }
 .legal h2 { font-size:24px; font-weight:750; margin:44px 0 14px; }
 .legal ul { margin:0 0 18px; padding-left:22px; display:flex; flex-direction:column; gap:10px; }
 .legal li { font-size:15px; line-height:1.75; color:var(--ink-soft); }
+.feedback-section { background:var(--secondary); border-top:1px solid var(--border); }
+.feedback-inner { display:grid; grid-template-columns:1fr 1.2fr; gap:60px; align-items:start; padding-top:64px; padding-bottom:64px; }
+.feedback-copy h2 { font-size:28px; font-weight:700; line-height:1.3; margin:12px 0 10px; }
+.feedback-copy p { font-size:13px; color:var(--muted-foreground); line-height:1.8; }
+.feedback-form { display:flex; flex-direction:column; gap:12px; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:20px; }
+.feedback-form .main-action { align-self:flex-end; }
+.feedback-kinds { display:flex; gap:8px; }
+.feedback-thanks { font-weight:600; }
+.feedback-error { color:var(--destructive); font-size:13px; }
+.feedback-hp { position:absolute; left:-9999px; width:1px; height:1px; }
+@media (max-width: 760px) { .feedback-inner { grid-template-columns:1fr; gap:24px; } }
