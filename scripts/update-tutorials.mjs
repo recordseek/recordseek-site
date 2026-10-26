@@ -22,10 +22,15 @@ import { fileURLToPath } from 'node:url';
 
 export const QUERIES = ['recordseek', 'record seek', 'recordseek tutorial', 'recordseek familysearch', 'treeconnect familysearch'];
 export const RELEVANT = /record\s*seek|tree\s*connect/i;
+// "World Record Seek" is speedrun slang (a record attempt in a game called Seek); never ours.
+export const IRRELEVANT = /world\s+record\s+seek/i;
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36';
 const DESCRIPTION_MAX = 400;
 
-export const isRelevant = v => RELEVANT.test(`${v.title ?? ''}\n${v.description ?? ''}`);
+export const isRelevant = v => {
+  const text = `${v.title ?? ''}\n${v.description ?? ''}`;
+  return RELEVANT.test(text) && !IRRELEVANT.test(text);
+};
 const day = d => d.toISOString().slice(0, 10);
 const pause = ms => new Promise(r => setTimeout(r, ms));
 

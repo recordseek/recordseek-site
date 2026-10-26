@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { TutorialGrid, formatDuration, formatMonth, formatViews, isNew, sortTutorials, type Tutorial } from "@/components/tutorial-grid";
+import { TutorialGrid, TutorialShowcase, formatDuration, formatMonth, formatViews, isNew, pickFeatured, sortTutorials, type Tutorial } from "@/components/tutorial-grid";
 
 const video = (over: Partial<Tutorial>): Tutorial => ({ id: "aaaaaaaaaaa", title: "A", channel: "Chan", publishedAt: "2020-01-01", durationSeconds: 60, views: 10, firstSeen: "2026-10-26", ...over });
 
@@ -26,6 +26,35 @@ describe("tutorial formatting", () => {
     const list = [video({ id: "old", publishedAt: "2015-01-01", views: 900 }), video({ id: "new", publishedAt: "2023-01-01", views: 5 })];
     expect(sortTutorials(list, "newest").map(v => v.id)).toEqual(["new", "old"]);
     expect(sortTutorials(list, "popular").map(v => v.id)).toEqual(["old", "new"]);
+  });
+});
+
+describe("pickFeatured", () => {
+  const list = [
+    video({ id: "rex1", channel: "Rexburg", views: 5000 }),
+    video({ id: "rex2", channel: "Rexburg", views: 4000 }),
+    video({ id: "byu1", channel: "BYU", views: 9000 }),
+    video({ id: "carol", channel: "Carol", views: 300 }),
+    video({ id: "tiny", channel: "Tiny", views: 2 }),
+  ];
+
+  it("takes the most watched video per channel first", () => {
+    expect(pickFeatured(list, 3).map(v => v.id)).toEqual(["byu1", "rex1", "carol"]);
+  });
+
+  it("fills remaining slots from the same channels when there are not enough channels", () => {
+    expect(pickFeatured(list.slice(0, 3), 3).map(v => v.id)).toEqual(["byu1", "rex1", "rex2"]);
+    expect(pickFeatured([], 3)).toEqual([]);
+  });
+});
+
+describe("TutorialShowcase", () => {
+  it("renders the given videos with h3 titles and plays inline", () => {
+    render(<TutorialShowcase tutorials={[video({ id: "byu00000000", title: "BYU talk", views: 9000 })]} asOf="2026-10-26T00:00:00Z" />);
+    expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent("BYU talk");
+    expect(screen.queryByRole("heading", { level: 2 })).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Play BYU talk" }));
+    expect(document.querySelector("iframe")?.getAttribute("src")).toContain("embed/byu00000000");
   });
 });
 

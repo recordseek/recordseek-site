@@ -48,11 +48,13 @@ and are baked into the prerendered HTML at build time (shown rounded down to the
 
 `/tutorials` lists every YouTube video about RecordSeek (and its old nickname TreeConnect) that we can find,
 from `web/src/data/tutorials.json`, baked into the prerendered HTML at build time. Thumbnails are plain images;
-the YouTube player loads only when a video is clicked.
+the YouTube player loads only when a video is clicked. The homepage's "See it in action" section shows the
+three most watched videos (one per channel, `pickFeatured` in `tutorial-grid.tsx`), so it rotates on its own
+as the weekly refresh updates view counts.
 
 - `.github/workflows/update-tutorials.yml` runs Mondays at 07:23 UTC. It runs `scripts/update-tutorials.mjs`,
   which searches YouTube for a few phrasings (`QUERIES` in the script), keeps hits whose title or description
-  mention RecordSeek/TreeConnect, re-fetches every listed video's metadata (title, channel, date, length, views),
+  mention RecordSeek/TreeConnect (but not "World Record Seek", speedrun slang), re-fetches every listed video's metadata (title, channel, date, length, views),
   drops videos that are gone or private, and rewrites the JSON newest first. Then it rebuilds only the marketing
   site (`SKIP_SHARE=1 scripts/release.sh`) and pushes to `site`.
 - Optional repo secret `YOUTUBE_API_KEY` (a YouTube Data API v3 key; ~200 quota units per run). With it the

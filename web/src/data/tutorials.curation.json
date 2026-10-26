@@ -1,5 +1,7 @@
 {
   "_comment": "Hand edits for the Tutorials page. include: video ids to list even if YouTube search misses them. exclude: ids to hide even if search finds them.",
   "include": [],
-  "exclude": []
+  "exclude": [
+    "aMjuQCCVOjs"
+  ]
 }

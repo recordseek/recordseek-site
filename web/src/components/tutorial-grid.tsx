@@ -55,6 +55,27 @@ export function isNew(video: Tutorial, asOf: string): boolean {
   return age >= 0 && age <= 90 * 86_400_000;
 }
 
+/**
+ * The videos the homepage showcases: the most watched ones, one per channel so a
+ * prolific family history center does not fill every slot. Falls back to the next
+ * most watched when there are fewer channels than slots.
+ */
+export function pickFeatured(list: readonly Tutorial[], n = 3): Tutorial[] {
+  const sorted = sortTutorials(list, 'popular');
+  const picked: Tutorial[] = [];
+  const channels = new Set<string>();
+  for (const v of sorted) {
+    if (picked.length >= n) break;
+    if (channels.has(v.channel)) continue;
+    channels.add(v.channel); picked.push(v);
+  }
+  for (const v of sorted) {
+    if (picked.length >= n) break;
+    if (!picked.includes(v)) picked.push(v);
+  }
+  return picked;
+}
+
 export function TutorialGrid({ tutorials, asOf }: { tutorials: readonly Tutorial[]; asOf: string }) {
   const [sort, setSort] = useState<SortKey>('newest');
   const [playing, setPlaying] = useState<string | null>(null);
@@ -72,9 +93,16 @@ export function TutorialGrid({ tutorials, asOf }: { tutorials: readonly Tutorial
   </>;
 }
 
+/** A row of featured videos for the homepage; titles are h3 under the section's h2. */
+export function TutorialShowcase({ tutorials, asOf }: { tutorials: readonly Tutorial[]; asOf: string }) {
+  const [playing, setPlaying] = useState<string | null>(null);
+  const play = (id: string) => { setPlaying(id); track('tutorial_played', { video: id, placement: 'home' }); };
+  return <div className="tutorial-grid tutorial-showcase">{tutorials.map(v => <TutorialCard key={v.id} video={v} fresh={isNew(v, asOf)} playing={playing === v.id} onPlay={() => play(v.id)} headingLevel="h3" />)}</div>;
+}
+
 // The thumbnail is a plain image until it is clicked, so the page loads no YouTube
 // code (or cookies) for videos nobody plays.
-function TutorialCard({ video, fresh, playing, onPlay }: { video: Tutorial; fresh: boolean; playing: boolean; onPlay: () => void }) {
+export function TutorialCard({ video, fresh, playing, onPlay, headingLevel: Heading = 'h2' }: { video: Tutorial; fresh: boolean; playing: boolean; onPlay: () => void; headingLevel?: 'h2' | 'h3' }) {
   return <article className="tutorial-card">
     <div className="tutorial-media">
       {playing
@@ -87,7 +115,7 @@ function TutorialCard({ video, fresh, playing, onPlay }: { video: Tutorial; fres
           </button>}
     </div>
     <div className="tutorial-body">
-      <h2><a href={`https://www.youtube.com/watch?v=${video.id}`} target="_blank" rel="noreferrer">{video.title}</a></h2>
+      <Heading><a href={`https://www.youtube.com/watch?v=${video.id}`} target="_blank" rel="noreferrer">{video.title}</a></Heading>
       <p className="tutorial-meta">{video.channel}{video.publishedAt && ` · ${formatMonth(video.publishedAt)}`}{video.views > 0 && ` · ${formatViews(video.views)}`}</p>
     </div>
   </article>;

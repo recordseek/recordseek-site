@@ -314,10 +314,15 @@ footer { border-top:1px solid var(--border); padding:34px 0; }
 .tutorial-duration, .tutorial-new { position:absolute; font-size:11px; font-weight:650; line-height:1; padding:5px 7px; border-radius:5px; color:#fff; }
 .tutorial-duration { right:10px; bottom:10px; background:oklch(0.2 0.02 155 / .82); font-variant-numeric:tabular-nums; }
 .tutorial-new { left:10px; top:10px; background:var(--primary); text-transform:uppercase; letter-spacing:.8px; }
-.tutorial-body h2 { font-size:15px; font-weight:650; line-height:1.4; margin:0 0 6px; }
-.page-section .tutorial-card .tutorial-body h2 a { color:var(--foreground); text-decoration:none; }
-.page-section .tutorial-card .tutorial-body h2 a:hover { color:var(--primary); }
+.tutorial-body :is(h2,h3) { font-size:15px; font-weight:650; line-height:1.4; margin:0 0 6px; }
+.page-section .tutorial-card .tutorial-body h2 a, .tutorials-section .tutorial-body h3 a { color:var(--foreground); text-decoration:none; }
+.page-section .tutorial-card .tutorial-body h2 a:hover, .tutorials-section .tutorial-body h3 a:hover { color:var(--primary); }
 .tutorial-meta { margin:0; font-size:12px; line-height:1.6; color:var(--muted-foreground); }
 .tutorials-more { padding-top:0; }
+/* Homepage showcase: the three most watched videos in a row under "See it in action". */
+.tutorials-section { padding-top:0; }
+.tutorials-section .tutorial-showcase { margin-top:40px; }
+.tutorials-section .download-note { margin-top:34px; font-size:13px; }
+.tutorials-section .download-note a { display:inline-flex; align-items:center; gap:6px; }
 @media (max-width: 1050px) { .tutorial-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media (max-width: 640px) { .tutorial-grid { grid-template-columns:1fr; gap:26px; } .tutorial-toolbar { flex-direction:column; align-items:flex-start; gap:12px; } }

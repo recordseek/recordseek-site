@@ -7,6 +7,7 @@ test('relevance: RecordSeek or TreeConnect in title or description, any spacing/
   assert.equal(isRelevant({ title: 'Using "Record Seek" to Create Sources' }), true);
   assert.equal(isRelevant({ title: 'Adding sources', description: 'with Tree  Connect' }), true);
   assert.equal(isRelevant({ title: 'I SEEK JESUS - Soaking worship', description: 'Central Record' }), false);
+  assert.equal(isRelevant({ title: '100-140 World Record Seek ENTRY! 5:04' }), false);
 });
 
 test('durations, clocks, view counts and relative dates', () => {
