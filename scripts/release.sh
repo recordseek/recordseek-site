@@ -41,7 +41,8 @@ if [ ! -d node_modules ] || [ package-lock.json -nt node_modules ]; then
   npm ci --no-audit --no-fund
 fi
 rm -rf .output
-npm run build
+# Stamp the site build with its git SHA so PostHog events carry app_version.
+VITE_SITE_RELEASE="recordseek-site@$(git -C "$ROOT" rev-parse --short HEAD 2>/dev/null || echo unknown)" npm run build
 OUT="$ROOT/web/.output/public"
 [ -f "$OUT/index.html" ] || { echo "Site build produced no index.html" >&2; exit 1; }
 

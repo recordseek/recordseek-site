@@ -10,6 +10,21 @@ const POSTHOG_KEY = import.meta.env['VITE_POSTHOG_KEY'] || 'phc_AzZzdRdxntXqHxNi
 
 type Props = Record<string, string | number | boolean | null>;
 
+/**
+ * Which deployment served this page, from the hostname — matches the /share/
+ * app's `deployEnv` so events from both surfaces share one `env` property.
+ */
+function deployEnv(): string {
+  const h = typeof window !== 'undefined' ? window.location.hostname.toLowerCase() : '';
+  if (h === 'recordseek.com' || h === 'www.recordseek.com') return 'production';
+  if (h.endsWith('.github.io')) return 'stage';
+  if (h === 'localhost' || h === '127.0.0.1' || h.endsWith('.local')) return 'development';
+  return h || 'unknown';
+}
+
+// Site build version (git SHA), injected by scripts/release.sh; empty in dev.
+const SITE_RELEASE = (import.meta.env['VITE_SITE_RELEASE'] as string | undefined) || '';
+
 let client: PostHog | null = null;
 const queued: [string, Props | undefined][] = [];
 
@@ -69,7 +84,7 @@ export function initAnalytics(): void {
       disable_session_recording: true,
       disable_surveys: true,
     });
-    posthog.register({ app: 'site' });
+    posthog.register({ app: 'site', env: deployEnv(), ...(SITE_RELEASE ? { app_version: SITE_RELEASE } : {}) });
     client = posthog;
     for (const [event, props] of queued.splice(0)) posthog.capture(event, props);
   });
