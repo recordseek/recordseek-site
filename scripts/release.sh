@@ -85,6 +85,18 @@ if [ -z "${SKIP_SHARE:-}" ]; then
   cd "$APP_DIR"
   cp "$APP_ENV_FILE" packages/web/.env
   pnpm install --frozen-lockfile --silent
+
+  # Pre-deploy gate: typecheck + lint + the full test suite, run against the
+  # exact commit about to ship. `set -e` makes any failure abort the release
+  # before a single file reaches share/, so a regression can never go live.
+  # SKIP_GATE=1 is an emergency-hotfix escape hatch only — it ships UNVERIFIED.
+  if [ -n "${SKIP_GATE:-}" ]; then
+    echo "WARNING: SKIP_GATE set — shipping recordseek-app@$APP_SHA WITHOUT running typecheck/tests" >&2
+  else
+    log "Gate: typecheck + lint + tests for recordseek-app@$APP_SHA (halts the release on any failure)"
+    pnpm gate
+  fi
+
   VITE_RELEASE="recordseek-app@$APP_SHA" pnpm --filter @recordseek/web build:share
   [ -f packages/web/dist/index.html ] || { echo "Share build produced no index.html" >&2; exit 1; }
   rsync -a --delete packages/web/dist/ "$ROOT/share/"
