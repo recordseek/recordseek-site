@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-26T19:08:15.911Z",
+  "updatedAt": "2026-10-26T19:09:31.501Z",
   "queries": [
     "recordseek",
     "record seek",
@@ -248,6 +248,18 @@
       "durationSeconds": 703,
       "views": 1320,
       "description": "This short video demonstrates the process of adding an external source record to an individual in FamilySearch.org's Family Tree program using RecordSeek.com's utility, Tree Connect.",
+      "firstSeen": "2026-10-26"
+    },
+    {
+      "id": "AJ3FVOGsNxs",
+      "title": "Gathering Information by Attaching Sources Using Record Seek",
+      "channel": "BYU-Idaho Family History Training Videos",
+      "channelId": "UCC999HHpTy2RGRaMluWz31g",
+      "publishedAt": null,
+      "durationSeconds": 703,
+      "views": 229,
+      "description": "This video demonstrates how to gather information about ancestors by attaching sources using RecordSeek.",
+      "approximate": true,
       "firstSeen": "2026-10-26"
     }
   ]
