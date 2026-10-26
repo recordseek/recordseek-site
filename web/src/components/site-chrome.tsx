@@ -33,6 +33,7 @@ const navItems = [
   { label: 'Browsers', to: '/', hash: 'extensions' },
   { label: 'Bookmark', to: '/bookmarklet' },
   { label: 'Mobile', to: '/', hash: 'mobile' },
+  { label: 'Tutorials', to: '/tutorials' },
   { label: 'Help', to: '/contact' },
 ] as const;
 
@@ -45,7 +46,7 @@ export function SiteHeader({ onGetClick }: { onGetClick?: () => void }) {
 }
 
 export function SiteFooter() {
-  return <footer><div className="container-wide"><div className="footer-top"><Brand /><div className="footer-links"><Link to="/about">About RecordSeek</Link><Link to="/contact">Contact & support</Link><Link to="/faq">FAQ</Link><Link to="/developers">For developers</Link><Link to="/privacy">Privacy policy</Link><Link to="/terms">Terms & conditions</Link><Link to="/eula">EULA</Link></div></div><div className="footer-bottom"><span>© 2012–{new Date().getFullYear()} RecordSeek. Every story matters.</span><span>Made for the discoverer in all of us.</span></div></div></footer>;
+  return <footer><div className="container-wide"><div className="footer-top"><Brand /><div className="footer-links"><Link to="/about">About RecordSeek</Link><Link to="/contact">Contact & support</Link><Link to="/faq">FAQ</Link><Link to="/tutorials">Video tutorials</Link><Link to="/developers">For developers</Link><Link to="/privacy">Privacy policy</Link><Link to="/terms">Terms & conditions</Link><Link to="/eula">EULA</Link></div></div><div className="footer-bottom"><span>© 2012–{new Date().getFullYear()} RecordSeek. Every story matters.</span><span>Made for the discoverer in all of us.</span></div></div></footer>;
 }
 
 export function PageShell({ eyebrow, title, intro, children }: { eyebrow: string; title: ReactNode; intro?: ReactNode; children: ReactNode }) {

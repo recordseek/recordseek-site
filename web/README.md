@@ -43,3 +43,22 @@ and are baked into the prerendered HTML at build time (shown rounded down to the
 - Run manually: `gh workflow run update-stats.yml`. Locally: `POSTHOG_API_KEY=... node scripts/update-stats.mjs --dry-run`
   (drop `--dry-run` to write the files). Re-running in the same month replaces that month's row.
 - Tests: `node --test scripts/update-stats.test.mjs` and `cd web && npx vitest run`.
+
+## Tutorials page
+
+`/tutorials` lists every YouTube video about RecordSeek (and its old nickname TreeConnect) that we can find,
+from `web/src/data/tutorials.json`, baked into the prerendered HTML at build time. Thumbnails are plain images;
+the YouTube player loads only when a video is clicked.
+
+- `.github/workflows/update-tutorials.yml` runs Mondays at 07:23 UTC. It runs `scripts/update-tutorials.mjs`,
+  which searches YouTube for a few phrasings (`QUERIES` in the script), keeps hits whose title or description
+  mention RecordSeek/TreeConnect, re-fetches every listed video's metadata (title, channel, date, length, views),
+  drops videos that are gone or private, and rewrites the JSON newest first. Then it rebuilds only the marketing
+  site (`SKIP_SHARE=1 scripts/release.sh`) and pushes to `site`.
+- Optional repo secret `YOUTUBE_API_KEY` (a YouTube Data API v3 key; ~200 quota units per run). With it the
+  script uses the official API; without it, it reads YouTube's public search and watch pages, which works but
+  can break if YouTube changes its markup (the workflow then fails loudly and the page keeps its last list).
+- `web/src/data/tutorials.curation.json`: `include` pins video ids the search misses; `exclude` hides false
+  positives. `firstSeen` in the data survives refreshes.
+- Run manually: `gh workflow run update-tutorials.yml`. Locally: `node scripts/update-tutorials.mjs --dry-run`.
+- Tests: `node --test scripts/update-tutorials.test.mjs` and `cd web && npx vitest run`.

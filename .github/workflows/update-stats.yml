@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: update-stats
+  group: site-publish # shared with update-tutorials so two bots never push at once
   cancel-in-progress: false
 
 jobs:

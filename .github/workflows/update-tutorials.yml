@@ -1,0 +1,53 @@
+name: Update tutorials page
+
+on:
+  schedule:
+    - cron: '23 7 * * 1' # Mondays 07:23 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Shared with update-stats so two bots never push to `site` at once.
+concurrency:
+  group: site-publish
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: site
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Check YouTube for RecordSeek videos
+        env:
+          # Optional. With a YouTube Data API v3 key the script uses the official API;
+          # without one it reads YouTube's public search and watch pages.
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: node scripts/update-tutorials.mjs
+
+      # The marketing site only: SKIP_SHARE=1 needs no app .env, no pnpm and no
+      # clone of recordseek-app (share/ and sdk/ are left untouched).
+      - name: Rebuild marketing site
+        run: SKIP_SHARE=1 scripts/release.sh
+
+      - name: Commit and push
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No changes; nothing to commit."
+            exit 0
+          fi
+          n="$(node -p "require('./web/src/data/tutorials.json').videos.length")"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A .
+          git commit -m "Tutorials: weekly YouTube refresh ($n videos)"
+          git push origin HEAD:site
