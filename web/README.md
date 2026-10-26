@@ -56,7 +56,8 @@ the YouTube player loads only when a video is clicked.
   drops videos that are gone or private, and rewrites the JSON newest first. Then it rebuilds only the marketing
   site (`SKIP_SHARE=1 scripts/release.sh`) and pushes to `site`.
 - Optional repo secret `YOUTUBE_API_KEY` (a YouTube Data API v3 key; ~200 quota units per run). With it the
-  script uses the official API. Without it, it reads YouTube's public search and watch pages. From GitHub's
+  script uses the official API. `scripts/setup-youtube-key.sh` mints the key (gcloud signed in as a project
+  owner) and stores the secret without printing it. Without it, it reads YouTube's public search and watch pages. From GitHub's
   runners YouTube answers watch pages with a sign-in bot check, so there the script treats a video as
   "unverified": a listed video keeps its last metadata, and a new search hit is added from the search page's
   own details (marked `approximate: true`, refined by the next verified run). A run that would drop more than
