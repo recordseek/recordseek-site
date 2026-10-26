@@ -1,0 +1,1 @@
+import{r as e}from"./index-BpiWYN5f.js";var t=e;export{t as component};
