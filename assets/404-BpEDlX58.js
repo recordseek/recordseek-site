@@ -1,1 +1,0 @@
-import{r as e}from"./index-XVO_Zp96.js";var t=e;export{t as component};
