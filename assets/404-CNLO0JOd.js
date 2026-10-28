@@ -1,0 +1,1 @@
+import{r as e}from"./index-DcTt17LX.js";var t=e;export{t as component};

@@ -1,1 +1,0 @@
-import{r as e}from"./index-CNGa3wpE.js";var t=e;export{t as component};
