@@ -1,1 +1,0 @@
-import{r as e}from"./index-zmpD1NNY.js";var t=e;export{t as component};
