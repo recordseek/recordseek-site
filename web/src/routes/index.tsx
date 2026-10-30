@@ -28,12 +28,13 @@ export const Route = createFileRoute('/')({
   component: Index,
 });
 
-// Every Chromium-based browser installs from the Chrome Web Store.
+// Edge has its own listing; every other Chromium-based browser installs from the Chrome Web Store.
 const chromeStore = 'https://chrome.google.com/webstore/detail/recordseek/ekdikahbgfofidpjnldofcelffahiefl';
+const edgeStore = 'https://microsoftedge.microsoft.com/addons/detail/recordseek/caandekadjbeifokbkmhfphjhopoobcp';
 const browsers = [
   { name: 'Chrome', href: chromeStore },
   { name: 'Firefox', href: 'https://addons.mozilla.org/en-US/firefox/addon/recordseek/' },
-  { name: 'Edge', href: chromeStore },
+  { name: 'Edge', href: edgeStore },
   { name: 'Opera', href: 'https://addons.opera.com/en/extensions/details/recordseek/' },
   { name: 'Brave', href: chromeStore },
   { name: 'Vivaldi', href: chromeStore },
