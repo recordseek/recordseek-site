@@ -1,1 +1,0 @@
-import{r as e}from"./index-CCyr5Tv4.js";var t=e;export{t as component};
