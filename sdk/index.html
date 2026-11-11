@@ -30,7 +30,7 @@ input,select{width:100%;padding:.4rem .5rem;border:1px solid var(--line);border-
 </head>
 <body>
 <main>
-<span class="badge">v1.0.0</span>
+<span class="badge">v1.1.0</span>
 <h1>RecordSeek Developer Kit</h1>
 <p class="lead">Add a RecordSeek button to any web page with one script tag. Visitors click it and the RecordSeek share app opens with the source (and optionally a person) ready to save to FamilySearch, Ancestry or as a citation.</p>
 
@@ -50,9 +50,9 @@ input,select{width:100%;padding:.4rem .5rem;border:1px solid var(--line);border-
 <h2>Versioned URLs</h2>
 <table><tbody>
 <tr><td><code>https://recordseek.com/sdk/v1/recordseek.js</code></td><td>Moving: always the latest 1.x release (bug fixes, no breaking changes).</td></tr>
-<tr><td><code>https://recordseek.com/sdk/1.0.0/recordseek.js</code></td><td>Pinned: never changes, so you can add a Subresource Integrity hash.</td></tr>
+<tr><td><code>https://recordseek.com/sdk/1.1.0/recordseek.js</code></td><td>Pinned: never changes, so you can add a Subresource Integrity hash.</td></tr>
 </tbody></table>
-<pre><code>&lt;script src="https://recordseek.com/sdk/1.0.0/recordseek.js"
+<pre><code>&lt;script src="https://recordseek.com/sdk/1.1.0/recordseek.js"
         integrity="sha384-&hellip;" crossorigin="anonymous" defer&gt;&lt;/script&gt;</code></pre>
 <p><strong>Content-Security-Policy:</strong> allow <code>script-src https://recordseek.com</code>. The button is created with the DOM API (no inline scripts or styles from strings are executed), and the stylesheet is a plain <code>&lt;style&gt;</code> element; if your CSP forbids inline styles, set <code>data-style="none"</code> and style the button yourself.</p>
 
@@ -86,6 +86,7 @@ input,select{width:100%;padding:.4rem .5rem;border:1px solid var(--line);border-
 <tr><td><code>data-shape</code></td><td>Button</td><td>&mdash;</td><td>rounded (default), pill or square.</td></tr>
 <tr><td><code>data-icon-type</code></td><td>Button</td><td><code>icon</code></td><td>color (default, full-color mark), white (single-color white mark) or none (text only).</td></tr>
 <tr><td><code>data-icon-position</code></td><td>Button</td><td>&mdash;</td><td>start (default) or end.</td></tr>
+<tr><td><code>data-icon-only</code></td><td>Button</td><td>&mdash;</td><td>true: show only the RecordSeek mark, no text. The label is kept as the accessible name and tooltip. Default false.</td></tr>
 <tr><td><code>data-class</code></td><td>Button</td><td>&mdash;</td><td>Replaces the default button classes entirely (space-separated). Default styles then do not apply.</td></tr>
 <tr><td><code>data-style</code></td><td>Button</td><td>&mdash;</td><td>none: do not inject the default stylesheet (you style .recordseek-button yourself).</td></tr>
 <tr><td><code>data-partner</code></td><td>Other</td><td>&mdash;</td><td>Your short partner id (letters, digits, . _ -), used for attribution.</td></tr>
@@ -108,16 +109,18 @@ input,select{width:100%;padding:.4rem .5rem;border:1px solid var(--line);border-
 <pre><code>.recordseek-button { background: navy; border-radius: 2px; font-family: Georgia, serif; }</code></pre>
 <div class="recordseek" data-scrape="false" data-partner="recordseek-docs"></div>
 </div>
-<p>Other options: <code>data-class="my-btn other"</code> replaces the default classes entirely (the default styles then do not apply); <code>data-style="none"</code> or <code>window.RecordSeekConfig = { injectStyles: false }</code> skips injecting the stylesheet. Icons: <code>data-icon-type</code> <code>color</code> (default), <code>white</code> or <code>none</code>; <code>data-icon-position</code> <code>start</code> or <code>end</code>. All icons are inline SVG, with no network requests; the logo files are also published as <a href="./recordseek-mark.svg">recordseek-mark.svg</a> and <a href="./recordseek-mark-white.svg">recordseek-mark-white.svg</a>.</p>
+<p>Other options: <code>data-class="my-btn other"</code> replaces the default classes entirely (the default styles then do not apply); <code>data-style="none"</code> or <code>window.RecordSeekConfig = { injectStyles: false }</code> skips injecting the stylesheet. Icons: <code>data-icon-type</code> <code>color</code> (default), <code>white</code> or <code>none</code>; <code>data-icon-position</code> <code>start</code> or <code>end</code>; <code>data-icon-only="true"</code> shows just the mark, with the label kept as its accessible name and hover tooltip. All icons are inline SVG, with no network requests; the logo files are also published as <a href="./recordseek-mark.svg">recordseek-mark.svg</a> and <a href="./recordseek-mark-white.svg">recordseek-mark-white.svg</a>.</p>
 <div class="card demo-row">
   <div class="recordseek" data-icon-type="color" data-label="Color icon" data-scrape="false" data-partner="recordseek-docs"></div>
   <div class="recordseek" data-icon-type="white" data-label="White icon" data-scrape="false" data-partner="recordseek-docs"></div>
   <div class="recordseek" data-icon-type="none" data-label="No icon" data-scrape="false" data-partner="recordseek-docs"></div>
   <div class="recordseek" data-icon-position="end" data-label="Icon at end" data-scrape="false" data-partner="recordseek-docs"></div>
+  <div class="recordseek" data-icon-only="true" data-label="Save to RecordSeek" data-scrape="false" data-partner="recordseek-docs"></div>
+  <div class="recordseek" data-icon-only="true" data-shape="pill" data-label="Save to RecordSeek" data-scrape="false" data-partner="recordseek-docs"></div>
 </div>
 
 <h2>JavaScript API</h2>
-<pre><code>RecordSeek.version            // "1.0.0"
+<pre><code>RecordSeek.version            // "1.1.0"
 RecordSeek.scan(root?)        // render buttons under root (idempotent); runs automatically on load and for added elements
 RecordSeek.button(el, data?)  // render a button in one element
 RecordSeek.open({ givenName: 'Jane', surname: 'Doe', url: location.href })  // open RecordSeek programmatically
@@ -146,7 +149,7 @@ window.RecordSeekConfig = { base: 'http://localhost:9000/', partner: 'my-site', 
     ['firstName', 'First name', 'Dovy'], ['lastName', 'Last name', 'Paukstys'], ['birthDate', 'Birth date', '1980'],
     ['label', 'Label', 'RecordSeek'], ['bgColor', 'Background', '#1f6f43'], ['fontColor', 'Text color', '#ffffff'],
     ['size', 'Size', 'md', ['sm', 'md', 'lg']], ['shape', 'Shape', 'rounded', ['rounded', 'pill', 'square']],
-    ['iconType', 'Icon', 'color', ['color', 'white', 'none']], ['iconPosition', 'Icon position', 'start', ['start', 'end']]
+    ['iconType', 'Icon', 'color', ['color', 'white', 'none']], ['iconPosition', 'Icon position', 'start', ['start', 'end']], ['iconOnly', 'Icon only', 'false', ['false', 'true']]
   ];
   var box = document.getElementById('pg-fields'), preview = document.getElementById('pg-preview'), code = document.getElementById('pg-code');
   var inputs = {};
