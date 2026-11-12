@@ -4,6 +4,7 @@
 // FamilySearch users by a hash of their user id). Autocapture is on here (it is off in /share/,
 // which shows people's family records).
 import type { PostHog } from 'posthog-js';
+import { createGa, type Ga } from './ga';
 
 // Public client key (safe to ship); VITE_POSTHOG_KEY overrides it.
 const POSTHOG_KEY = import.meta.env['VITE_POSTHOG_KEY'] || 'phc_AzZzdRdxntXqHxNiJ4nM9duEnprenXt8XnKA2NKEoeFG';
@@ -28,7 +29,56 @@ const SITE_RELEASE = (import.meta.env['VITE_SITE_RELEASE'] as string | undefined
 let client: PostHog | null = null;
 const queued: [string, Props | undefined][] = [];
 
+// GA4 runs alongside PostHog (production host only) so traffic stays comparable
+// with the GA history. Cookieless; see ga.ts.
+let ga: Ga | null = null;
+let lastGaPath = '';
+
+function gaPageView(): void {
+  if (!ga) return;
+  const path = location.pathname;
+  if (path === lastGaPath) return;
+  const first = lastGaPath === '';
+  lastGaPath = path;
+  let referrer = '';
+  try {
+    referrer = first && document.referrer ? new URL(document.referrer).origin : '';
+  } catch {
+    referrer = '';
+  }
+  ga.pageView(location.origin + path, document.title, referrer);
+}
+
+function initGa(): void {
+  if (ga || deployEnv() !== 'production') return;
+  try {
+    ga = createGa();
+    ga.setDefaults({ app: 'site', env: 'production', app_version: SITE_RELEASE || null });
+    // Client-side navigation: the router uses pushState, which fires no event of its own.
+    for (const method of ['pushState', 'replaceState'] as const) {
+      const original = history[method].bind(history);
+      history[method] = (...args: Parameters<History['pushState']>) => {
+        original(...args);
+        setTimeout(gaPageView, 100);
+      };
+    }
+    window.addEventListener('popstate', () => setTimeout(gaPageView, 100));
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') ga?.pause();
+      else ga?.resume();
+    });
+    gaPageView();
+  } catch {
+    ga = null;
+  }
+}
+
 export function track(event: string, props?: Props): void {
+  try {
+    ga?.event(event, props);
+  } catch {
+    // ignore
+  }
   if (client) client.capture(event, props);
   else if (queued.length < 50) queued.push([event, props]);
 }
@@ -72,6 +122,7 @@ function listen(): void {
 export function initAnalytics(): void {
   if (!import.meta.env.PROD || client || typeof window === 'undefined') return;
   listen();
+  initGa();
   void import('posthog-js').then(({ default: posthog }) => {
     posthog.init(POSTHOG_KEY, {
       api_host: 'https://us.i.posthog.com',

@@ -21,13 +21,13 @@ function Privacy() {
   >
     <section className="container-wide page-section">
       <div className="legal">
-        <p><em>Last updated: October 2026.</em> RecordSeek is a free tool for saving citations to your FamilySearch and Ancestry trees. This policy explains exactly what happens to your data — and just as importantly, what doesn't.</p>
+        <p><em>Last updated: November 2026.</em> RecordSeek is a free tool for saving citations to your FamilySearch and Ancestry trees. This policy explains exactly what happens to your data — and just as importantly, what doesn't.</p>
 
         <h2>What we store</h2>
         <p>RecordSeek stores only two kinds of information:</p>
         <ul>
           <li><strong>General logs</strong> — standard server records such as the page requested, the time of the request, and the browser type. These keep the service running and help us spot problems.</li>
-          <li><strong>Analytics</strong> — anonymous, aggregated usage statistics (how many citations are saved, which browsers are most used, and similar counts). Analytics data is never used to identify you personally.</li>
+          <li><strong>Analytics</strong> — anonymous, aggregated usage statistics (how many citations are saved, which browsers are most used, and similar counts). We use PostHog and Google Analytics for this. They receive page addresses without any query details, the website a source was saved from (its domain only), and which browser extension or app was used. Analytics data is never used to identify you personally.</li>
         </ul>
         <p>That's it. No credentials, no account details, no additional personal information is ever stored by us.</p>
 
@@ -57,7 +57,7 @@ function Privacy() {
         <p>We use <ExternalLink href="https://posthog.com/privacy">PostHog</ExternalLink> to measure anonymous usage of recordseek.com and the RecordSeek share window: pages viewed, which browser extension you choose, and steps such as signing in to FamilySearch or saving a source. We send PostHog the website of the page you're citing (for example, findagrave.com) but never its full address, title, citation, notes, names or any record from your tree, and we don't record your screen. When you're signed in to FamilySearch, we also send PostHog a scrambled code made from your FamilySearch user ID (a one-way hash), so we can count how many people use RecordSeek across their devices. It's the same code every time, but it can't be turned back into your ID, and we never send your name, email or FamilySearch ID itself.</p>
 
         <h2>Cookies</h2>
-        <p>RecordSeek sets no analytics cookies: PostHog keeps its random visitor ID in your browser's local storage. The only cookies involved are the ones FamilySearch or Ancestry set during your own sign-in with them. We set no cookies of our own and do not track you across other websites.</p>
+        <p>RecordSeek sets no analytics cookies: PostHog and Google Analytics each keep a random visitor ID in your browser's local storage. The only cookies involved are the ones FamilySearch or Ancestry set during your own sign-in with them. We set no cookies of our own and do not track you across other websites.</p>
 
         <h2>Children's privacy</h2>
         <p>RecordSeek is a general-audience tool. We collect no personal information from anyone, so we collect none from children.</p>
