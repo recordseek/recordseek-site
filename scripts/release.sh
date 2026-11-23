@@ -105,8 +105,12 @@ if [ -z "${SKIP_SHARE:-}" ]; then
 
   # Developer kit: /sdk/ (docs), /sdk/v<major>/ (moving), /sdk/<x.y.z>/ (pinned,
   # for SRI — never changes once published, so a code change needs a version bump).
+  # bookmarklet.js is the exception: it carries the app commit in its rs_v
+  # (SDK_BUILD), so it changes every release. Only the moving /sdk/v<major>/
+  # copy is live (the bookmark loader loads that one); the pinned dir keeps
+  # whatever bookmarklet.js it first got and is not compared.
   log "Building developer kit"
-  pnpm --filter @recordseek/sdk build
+  SDK_BUILD="$APP_SHA" pnpm --filter @recordseek/sdk build
   SDK_DIST="$APP_DIR/packages/sdk/dist"
   [ -f "$SDK_DIST/recordseek.js" ] && [ -f "$SDK_DIST/version.txt" ] || { echo "SDK build produced no recordseek.js/version.txt" >&2; exit 1; }
   SDK_VERSION="$(tr -d '[:space:]' < "$SDK_DIST/version.txt")"
@@ -114,6 +118,7 @@ if [ -z "${SKIP_SHARE:-}" ]; then
   SDK_MAJOR="$ROOT/sdk/v${SDK_VERSION%%.*}"
   if [ -d "$SDK_PIN" ]; then
     for f in "$SDK_DIST"/*.js; do
+      [ "$(basename "$f")" = bookmarklet.js ] && continue
       cmp -s "$f" "$SDK_PIN/$(basename "$f")" || {
         echo "sdk/$SDK_VERSION is already published with different $(basename "$f"); bump packages/sdk version" >&2
         exit 1
@@ -121,9 +126,9 @@ if [ -z "${SKIP_SHARE:-}" ]; then
     done
   fi
   mkdir -p "$SDK_PIN" "$SDK_MAJOR"
-  for dir in "$SDK_PIN" "$SDK_MAJOR"; do
-    rsync -a --delete --include='*.js' --include='*.js.map' --include='version.txt' --exclude='*' "$SDK_DIST/" "$dir/"
-  done
+  rsync -a --delete --exclude='bookmarklet.js*' --include='*.js' --include='*.js.map' --include='version.txt' --exclude='*' "$SDK_DIST/" "$SDK_PIN/"
+  rsync -a --delete --include='*.js' --include='*.js.map' --include='version.txt' --exclude='*' "$SDK_DIST/" "$SDK_MAJOR/"
+
   # The docs page loads ./recordseek.js, so /sdk/ gets the whole build too.
   rsync -a "$SDK_DIST/" "$ROOT/sdk/"
 fi
