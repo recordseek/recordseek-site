@@ -1,0 +1,1 @@
+import{r as e}from"./index-DBiPy1Pt.js";var t=e;export{t as component};
